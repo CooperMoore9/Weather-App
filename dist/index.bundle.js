@@ -14,9 +14,9 @@
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (() => {
 
-eval("\r\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\r\n// alert(message);\r\nlet dinbus = \"lesgso\";\r\n\n\n//# sourceURL=webpack://weatherapp/./src/index.ts?");
+eval("\r\nconst img = document.querySelector(\"img\");\r\nfetch(\"https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=cats\", { mode: \"cors\" })\r\n    .then(function (response) {\r\n    return response.json();\r\n})\r\n    .then(function (response) {\r\n    console.log(response.data.images.original.url);\r\n    if (img)\r\n        img.src = response.data.images.original.url;\r\n});\r\n\n\n//# sourceURL=webpack://weatherapp/./src/index.ts?");
 
 /***/ })
 
@@ -27,7 +27,7 @@ eval("\r\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\r\n
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
 /******/ 	var __webpack_exports__ = {};
-/******/ 	__webpack_modules__["./src/index.ts"](0, __webpack_exports__);
+/******/ 	__webpack_modules__["./src/index.ts"]();
 /******/ 	
 /******/ })()
 ;
