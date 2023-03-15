@@ -1,14 +1,14 @@
 import { stringify } from "postcss";
 
 const img = document.querySelector("img");
-let oldGif: string = "";
 const button = document.querySelector("button");
+const inInput = document.querySelector("input");
+let oldGif: string = "";
+let gifLink =
+  "https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=cat";
 
 function changeGif() {
-  fetch(
-    "https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=loop",
-    { mode: "cors" }
-  )
+  fetch(gifLink, { mode: "cors" })
     .then(function (response) {
       return response.json();
     })
@@ -27,5 +27,10 @@ function changeGif() {
 changeGif();
 
 button?.addEventListener("click", () => {
+  if (inInput?.value.trim() === "") {
+    gifLink = `https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=cat`;
+  } else {
+    gifLink = `https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=${inInput?.value}`;
+  }
   changeGif();
 });
