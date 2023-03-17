@@ -1,36 +1,42 @@
 import { stringify } from "postcss";
 
-const img = document.querySelector("img");
 const button = document.querySelector("button");
 const inInput = document.querySelector("input");
-let oldGif: string = "";
-let gifLink =
-  "https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=cat";
+let tempData = document.querySelector(".temp");
+let location = document.querySelector(".location");
+let notValid = document.querySelector(".notValid");
 
-async function changeGif() {
-  const response = await fetch(gifLink, { mode: "cors" })
-    .then(function (response) {
+let weatherLink =
+  "https://api.openweathermap.org/data/2.5/weather?q=Lubbock&units=imperial&APPID=7368db32d621614591afabd530b3c6d5";
+
+async function getWeatherData() {
+  return await fetch(weatherLink, { mode: "cors" }).then(function (response) {
+    if (response.ok === true) {
       return response.json();
-    })
-    .then(function (response) {
-      if (img) {
-        let newGif = response.data.images.original.url;
-        if (newGif === oldGif) {
-          return changeGif();
-        }
-        oldGif = response.data.images.original.url;
-        img.src = response.data.images.original.url;
-      }
-    });
+    }
+    throw new Error();
+  });
 }
 
-changeGif();
+async function changeData() {
+  try {
+    const data = await getWeatherData();
+    location!.textContent = data.name;
+    tempData!.textContent = `${data.main.temp} °F`;
+    notValid!.textContent = "";
+    console.log(data);
+  } catch {
+    notValid!.textContent = "Not a valid location";
+  }
+}
 
 button?.addEventListener("click", () => {
   if (inInput?.value.trim() === "") {
-    gifLink = `https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=cat`;
+    weatherLink = `https://api.openweathermap.org/data/2.5/weather?q=Lubbock&units=imperial&APPID=7368db32d621614591afabd530b3c6d5`;
   } else {
-    gifLink = `https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=${inInput?.value}`;
+    weatherLink = `https://api.openweathermap.org/data/2.5/weather?q=${inInput?.value}&units=imperial&APPID=7368db32d621614591afabd530b3c6d5`;
+    changeData();
   }
-  changeGif();
 });
+
+changeData();

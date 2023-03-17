@@ -9,36 +9,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const img = document.querySelector("img");
 const button = document.querySelector("button");
 const inInput = document.querySelector("input");
-let oldGif = "";
-let gifLink = "https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=cat";
-function changeGif() {
+let tempData = document.querySelector(".temp");
+let location = document.querySelector(".location");
+let notValid = document.querySelector(".notValid");
+let weatherLink = "https://api.openweathermap.org/data/2.5/weather?q=Lubbock&units=imperial&APPID=7368db32d621614591afabd530b3c6d5";
+function getWeatherData() {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch(gifLink, { mode: "cors" })
-            .then(function (response) {
-            return response.json();
-        })
-            .then(function (response) {
-            if (img) {
-                let newGif = response.data.images.original.url;
-                if (newGif === oldGif) {
-                    return changeGif();
-                }
-                oldGif = response.data.images.original.url;
-                img.src = response.data.images.original.url;
+        return yield fetch(weatherLink, { mode: "cors" }).then(function (response) {
+            if (response.ok === true) {
+                return response.json();
             }
+            throw new Error();
         });
     });
 }
-changeGif();
+function changeData() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const data = yield getWeatherData();
+            location.textContent = data.name;
+            tempData.textContent = `${data.main.temp} °F`;
+            notValid.textContent = "";
+            console.log(data);
+        }
+        catch (_a) {
+            notValid.textContent = "Not a valid location";
+        }
+    });
+}
 button === null || button === void 0 ? void 0 : button.addEventListener("click", () => {
     if ((inInput === null || inInput === void 0 ? void 0 : inInput.value.trim()) === "") {
-        gifLink = `https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=cat`;
+        weatherLink = `https://api.openweathermap.org/data/2.5/weather?q=Lubbock&units=imperial&APPID=7368db32d621614591afabd530b3c6d5`;
     }
     else {
-        gifLink = `https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=${inInput === null || inInput === void 0 ? void 0 : inInput.value}`;
+        weatherLink = `https://api.openweathermap.org/data/2.5/weather?q=${inInput === null || inInput === void 0 ? void 0 : inInput.value}&units=imperial&APPID=7368db32d621614591afabd530b3c6d5`;
+        changeData();
     }
-    changeGif();
 });
+changeData();
