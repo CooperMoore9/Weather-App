@@ -7,8 +7,8 @@ let oldGif: string = "";
 let gifLink =
   "https://api.giphy.com/v1/gifs/translate?api_key=4jBwtMTcHcjtcz6kOTYYnzUgHQOKa3HX&s=cat";
 
-function changeGif() {
-  fetch(gifLink, { mode: "cors" })
+async function changeGif() {
+  const response = await fetch(gifLink, { mode: "cors" })
     .then(function (response) {
       return response.json();
     })
